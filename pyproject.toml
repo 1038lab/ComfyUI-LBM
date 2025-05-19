@@ -1,0 +1,26 @@
+[project]
+name = "ComfyUI-LBM"
+description = "A ComfyUI implementation of Latent Bridge Matching (LBM) for efficient image relighting. This node utilizes the LBM algorithm to perform single-step image-to-image translation specifically for relighting tasks."
+version = "1.0.0"
+license = {file = "LICENSE"}
+
+dependencies = [
+    "diffusers>=0.19.0",
+    "accelerate>=0.20.0",
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
+    "tqdm>=4.65.0",
+    "Pillow>=9.0.0",
+    "transformers>=4.30.0",
+    "safetensors>=0.3.1",
+    "requests>=2.25.0"
+]
+    
+[project.urls]
+Repository = "https://github.com/1038lab/ComfyUI-LBM"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = "ailab"
+DisplayName = "ComfyUI-LBM"
+Icon = ""
