@@ -1,7 +1,7 @@
 [project]
 name = "ComfyUI-LBM"
 description = "A ComfyUI implementation of Latent Bridge Matching (LBM) for efficient image relighting. This node utilizes the LBM algorithm to perform single-step image-to-image translation specifically for relighting tasks."
-version = "1.0.0"
+version = "1.1.0"
 license = {file = "LICENSE"}
 
 dependencies = [
