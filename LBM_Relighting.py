@@ -18,24 +18,32 @@ from diffusers import FlowMatchEulerDiscreteScheduler
 class LBM_Relighting:
     @classmethod
     def INPUT_TYPES(s):
+        model_paths = folder_paths.get_folder_paths("diffusion_models")
+        model_list = []
+        for path in model_paths:
+            lbm_path = os.path.join(path, "LBM")
+            if os.path.exists(lbm_path):
+                for file in os.listdir(lbm_path):
+                    if file.endswith(".safetensors"):
+                        model_list.append(file)
+        
         return {
             "required": {
-                "model": (folder_paths.get_filename_list("diffusion_models"), {"default": "LBM_relighting.safetensors", "tooltip": "LBM model file loaded from 'ComfyUI/models/diffusion_models' folder"}),
+                "model": (model_list if model_list else ["LBM_relighting.safetensors"], {"default": "LBM_relighting.safetensors", "tooltip": "LBM model file loaded from 'ComfyUI/models/diffusion_models/LBM' folder"}),
                 "image": ("IMAGE",),
-                "steps": ("INT", {"default": 20, "min": 1, "max": 100, "tooltip": "LBM can achieve good results with just 20 step, but more steps can potentially improve quality"}),
+                "steps": ("INT", {"default": 28, "min": 1, "max": 100, "tooltip": "LBM can achieve good results with just 20 step, but more steps can potentially improve quality"}),
                 "precision": (["fp32", "bf16", "fp16"], {"default": "bf16", "tooltip": "The official model was trained with bf16 precision"}),
             },
             "optional": {
                 "bridge_noise_sigma": ("FLOAT", {"default": 0.005, "min": 0.0, "max": 0.1, "step": 0.001, "tooltip": "Controls the noise added in bridge matching process. Default: 0.005"}),
-                "max_samples": ("INT", {"default": 1, "min": 1, "max": 8, "tooltip": "Number of samples to generate in a batch"})
             }
         }
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "process"
-    CATEGORY = '🔆LBM'
+    CATEGORY = '🧪AILab/🔆LBM'
 
-    def process(self, model, image, steps, precision, bridge_noise_sigma=0.005, max_samples=1):
+    def process(self, model, image, steps, precision, bridge_noise_sigma=0.005):
         model_path = self.ensure_model_exists(model)
         
         dtype_map = {
@@ -75,7 +83,6 @@ class LBM_Relighting:
             z=z_source,
             num_steps=steps,
             conditioner_inputs=batch,
-            max_samples=max_samples,
         ).clamp(-1, 1)
         
         out = result.permute(0, 2, 3, 1).cpu().float()
@@ -93,18 +100,19 @@ class LBM_Relighting:
             raise RuntimeError("No diffusion_models paths found")
             
         for path in model_paths:
-            model_path = os.path.join(path, model_name)
+            lbm_path = os.path.join(path, "LBM")
+            model_path = os.path.join(lbm_path, model_name)
             if os.path.exists(model_path):
                 print(f"Model {model_name} found at {model_path}")
                 return model_path
                 
             if model_name != "LBM_relighting.safetensors":
-                default_path = os.path.join(path, "LBM_relighting.safetensors")
+                default_path = os.path.join(lbm_path, "LBM_relighting.safetensors")
                 if os.path.exists(default_path):
                     print(f"Default model found at {default_path}")
                     return default_path
         
-        download_path = model_paths[0]
+        download_path = os.path.join(model_paths[0], "LBM")
         print(f"Model not found in any path. Downloading to {download_path}...")
         
         os.makedirs(download_path, exist_ok=True)
@@ -215,11 +223,7 @@ class LBM_Relighting:
         scheduler_config = {
             'num_train_timesteps': 1000, 
             'shift': 1.0, 
-            'use_dynamic_shifting': False, 
-            'beta_schedule': 'scaled_linear', 
-            'beta_start': 0.00085, 
-            'beta_end': 0.012, 
-            'timestep_spacing': 'leading',
+            'use_dynamic_shifting': False
         }
         sampling_noise_scheduler = FlowMatchEulerDiscreteScheduler.from_config(scheduler_config)
 
@@ -234,7 +238,6 @@ class LBM_Relighting:
         ).to(dtype)
 
         return model
-
 
 NODE_CLASS_MAPPINGS = {
     "LBM_Relighting": LBM_Relighting,

@@ -1,7 +1,7 @@
 {
   "id": "00000000-0000-0000-0000-000000000000",
   "revision": 0,
-  "last_node_id": 18,
+  "last_node_id": 17,
   "last_link_id": 40,
   "nodes": [
     {
@@ -16,7 +16,7 @@
         920
       ],
       "flags": {},
-      "order": 4,
+      "order": 1,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -102,7 +102,7 @@
         790
       ],
       "flags": {},
-      "order": 6,
+      "order": 5,
       "mode": 0,
       "inputs": [
         {
@@ -131,15 +131,15 @@
       "id": 9,
       "type": "Anything Everywhere",
       "pos": [
-        760,
-        730
+        730,
+        490
       ],
       "size": [
         172.18905639648438,
         26
       ],
       "flags": {},
-      "order": 10,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -181,7 +181,7 @@
         150
       ],
       "flags": {},
-      "order": 2,
+      "order": 3,
       "mode": 0,
       "inputs": [
         {
@@ -313,7 +313,7 @@
         150
       ],
       "flags": {},
-      "order": 3,
+      "order": 4,
       "mode": 0,
       "inputs": [
         {
@@ -369,7 +369,7 @@
         106
       ],
       "flags": {},
-      "order": 1,
+      "order": 2,
       "mode": 0,
       "inputs": [
         {
@@ -453,31 +453,6 @@
         "depth_anything_v2_vitl.pth",
         1024
       ]
-    },
-    {
-      "id": 18,
-      "type": "MarkdownNote",
-      "pos": [
-        440,
-        330
-      ],
-      "size": [
-        540,
-        190
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "properties": {
-        "widget_ue_connectable": {}
-      },
-      "widgets_values": [
-        "**ComfyUI-LBM**\n\nA ComfyUI implementation of Latent Bridge Matching (LBM) for efficient image relighting. This node utilizes the LBM algorithm to perform single-step image-to-image translation specifically for relighting tasks.\n\n[https://github.com/1038lab/ComfyUI-LBM](https://github.com/1038lab/ComfyUI-LBM)\n\nLBM Depth Model:\n\n[https://huggingface.co/jasperai/LBM_depth/blob/main/model.safetensors](https://huggingface.co/jasperai/LBM_depth/blob/main/model.safetensors)\n\nLBM Normal Model:\n\n[https://huggingface.co/jasperai/LBM_normal/blob/main/model.safetensors](https://huggingface.co/jasperai/LBM_normal/blob/main/model.safetensors)"
-      ],
-      "color": "#332922",
-      "bgcolor": "#593930"
     }
   ],
   "links": [
@@ -587,10 +562,10 @@
       }
     ],
     "ds": {
-      "scale": 0.5644739300537776,
+      "scale": 0.8264462809917354,
       "offset": [
-        -319.46995627382427,
-        130.77105030245866
+        320.3231057084278,
+        -313.2123037151571
       ]
     },
     "links_added_by_ue": [
