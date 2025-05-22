@@ -8,6 +8,7 @@ A ComfyUI implementation of Latent Bridge Matching (LBM) for efficient image rel
 - **2025/05/22**: Update ComfyUI-LBM to **v1.1.0** ( [update.md](https://github.com/1038lab/ComfyUI-LBM/blob/main/update.md#v110-20250522) )
 
 ![LBM-Depth&Normal](example_workflows/LBM_Depth&Normal.png)
+Added Depth/Normal map generation support
 
 ## Features
 
