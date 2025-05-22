@@ -4,13 +4,21 @@ A ComfyUI implementation of Latent Bridge Matching (LBM) for efficient image rel
 
 ![LBM-Relighting](example_workflows/LBM-RElighting.png)
 
+## News & Updates
+- **2025/05/22**: Update ComfyUI-LBM to **v1.1.0** ( [update.md](https://github.com/1038lab/ComfyUI-LBM/blob/main/update.md#v110-20250522) )
+
+![LBM-Depth&Normal](example_workflows/LBM_Depth&Normal.png)
+
 ## Features
 
 - Fast image relighting with a single inference step
 - Simplified workflow with just one node
 - Optimized memory usage
 - **Automatic model download** - the model will be downloaded automatically and properly renamed on first use
-- Extensible architecture - support for depth and normal map processing coming soon
+- Support for depth and normal map generation
+- Mask support for selective processing
+- Multiple precision options (fp32, bf16, fp16)
+
 
 ## Installation
 
@@ -28,28 +36,54 @@ pip install -r requirements.txt
 
 ## Download Models
 
-The model will be automatically downloaded and renamed on first use, or you can manually download it:
+The models will be automatically downloaded and renamed on first use, or you can manually download them:
 
 | Model | Description | Link |
 | ----- | ----------- | ---- |
 | LBM Relighting | Main model for image relighting | [Download](https://huggingface.co/jasperai/LBM_relighting/resolve/main/model.safetensors) |
+| LBM Depth | Model for depth map generation | [Download](https://huggingface.co/jasperai/LBM_depth/resolve/main/model.safetensors) |
+| LBM Normals | Model for normal map generation | [Download](https://huggingface.co/jasperai/LBM_normals/resolve/main/model.safetensors) |
 
-After downloading, place the model file in your `ComfyUI/models/diffusion_models` directory and rename it to `LBM_relighting.safetensors`
+After downloading, place the model files in your `ComfyUI/models/diffusion_models/LBM` directory.
 
 ## Basic Usage
 
-1. Add the "LBM Relighting" node from the `🧪AILab/🔆LBM` category
-2. Connect an image source to the "LBM Relighting" node
+### Relighting Node
+
+1. Add the "Relighting (LBM)" node from the `🧪AILab/🔆LBM` category
+2. Connect an image source to the node
 3. Select the model file (defaults to `LBM_relighting.safetensors`)
-4. Adjust the steps parameter as needed (default: 30)
+4. Adjust the parameters as needed
+5. Run the workflow
+
+### Depth/Normal Node
+
+1. Add the "Depth / Normal (LBM)" node from the `🧪AILab/🔆LBM` category
+2. Connect an image source to the node
+3. Select the task type (depth or normal)
+4. Adjust the parameters as needed
 5. Run the workflow
 
 ### Parameters
 
-| Parameter | Description | Recommendation |
-| --------- | ----------- | -------------- |
-| **Model** | The LBM model file to use | Default is `LBM_relighting.safetensors` |
-| **Steps** | Number of inference steps | Default is 30. More steps may improve quality at the cost of processing time |
+#### Relighting Node
+
+| Parameter | Description | Default | Range |
+| --------- | ----------- | ------- | ----- |
+| **Model** | The LBM model file to use | `LBM_relighting.safetensors` | - |
+| **Steps** | Number of inference steps | 28 | 1-100 |
+| **Precision** | Inference precision | bf16 | fp32, bf16, fp16 |
+| **Bridge Noise Sigma** | Controls diversity of results | 0.005 | 0.0-0.1 |
+
+#### Depth/Normal Node
+
+| Parameter | Description | Default | Range |
+| --------- | ----------- | ------- | ----- |
+| **Task** | Select task type | depth | depth, normal |
+| **Steps** | Number of inference steps | 28 | 1-100 |
+| **Precision** | Inference precision | bf16 | fp32, bf16, fp16 |
+| **Bridge Noise Sigma** | Controls diversity of results | 0.1 | 0.0-0.1 |
+| **Mask** | Optional mask for selective processing | None | - |
 
 ## Setting Tips
 
@@ -57,8 +91,9 @@ After downloading, place the model file in your `ComfyUI/models/diffusion_models
 | ------- | -------------- |
 | **Steps** | For most images, 20-30 steps provides a good balance between quality and speed |
 | **Input Resolution** | The model works best with images of 512x512 or higher resolution |
-| **Memory Usage** | If you encounter memory issues, try processing images at a lower resolution |
+| **Memory Usage** | If you encounter memory issues, try using fp16 precision or processing images at a lower resolution |
 | **Performance** | For batch processing, consider reducing steps to 15-20 for faster throughput |
+| **Bridge Noise Sigma** | Lower values (0.005) for relighting, higher values (0.1) for depth/normal maps |
 
 ## About Model
 
@@ -69,6 +104,8 @@ LBM offers:
 * High-quality relighting effects
 * Memory-efficient operation
 * Consistent results across various image types
+* Support for depth and normal map generation
+* Mask-based selective processing
 
 The model is trained on a diverse dataset of images with different lighting conditions, ensuring:
 * Balanced representation across different image types
@@ -93,6 +130,11 @@ Future plans for this repository include:
   * numpy>=1.22.0
   * huggingface-hub>=0.19.0
   * tqdm>=4.65.0
+  * diffusers>=0.19.0
+  * accelerate>=0.20.0
+  * transformers>=4.30.0
+  * safetensors>=0.3.1
+  * requests>=2.25.0
 
 ## Credits
 
