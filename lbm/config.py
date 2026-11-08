@@ -39,7 +39,7 @@ class BaseConfig:
     @classmethod
     def _dict_from_json(cls, json_path: Union[str, os.PathLike]) -> Dict[str, Any]:
         try:
-            with open(json_path) as f:
+            with open(json_path, encoding="utf-8") as f:
                 try:
                     config_dict = json.load(f)
                     return config_dict
@@ -120,7 +120,7 @@ class BaseConfig:
         Returns:
             :class:`BaseConfig`: The created instance
         """
-        with open(yaml_path, "r") as f:
+        with open(yaml_path, "r", encoding="utf-8") as f:
             try:
                 config_dict = safe_load(f)
             except yaml.YAMLError as e:
